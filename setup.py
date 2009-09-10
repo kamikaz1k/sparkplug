@@ -3,6 +3,24 @@ from setuptools import setup, find_packages
 setup(
     name='sparkplug',
     version='1.0',
+    author='Owen Jacobson',
+    author_email='owen.jacobson@grimoire.ca',
+    url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
+    download_url='http://alchemy.grimoire.ca/python/releases/sparkplug/',
+    description='An AMQP message consumer daemon',
+    
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Environment :: No Input/Output (Daemon)',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: POSIX',
+        'Topic :: Software Development :: Libraries :: Application Frameworks',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: System :: Distributed Computing',
+        'Topic :: Utilities'
+    ],
     
     packages = find_packages(exclude=['*.test', '*.test.*']),
     
