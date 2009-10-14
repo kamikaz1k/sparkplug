@@ -1,6 +1,6 @@
 import re
 from pkg_resources import iter_entry_points
-import pygraph
+from pygraph.classes.digraph import digraph
 from pygraph.algorithms.sorting import topological_sorting
 import sparkplug.logutils
 
@@ -46,7 +46,7 @@ def calculate_dependencies(configurers):
     
     # We do this via graph theory rather than hard-coding a particular startup
     # order.
-    config_graph = pygraph.digraph()
+    config_graph = digraph()
     for configurer in configurers.values():
         config_graph.add_node(configurer)
     for configurer_name, configurer in configurers.items():

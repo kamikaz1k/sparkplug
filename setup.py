@@ -32,7 +32,7 @@ setup(
         'amqplib >= 0.6.1',
         'python-daemon',
         'functional',
-        'python-graph',
+        'python-graph-core',
         'setuptools' # for pkg_resources, mostly.
     ],
     
