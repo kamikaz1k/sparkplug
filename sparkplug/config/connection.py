@@ -35,6 +35,8 @@ and consumers_), then waiting for messages to be delivered.
 .. _consumers: `Consumer configuration`_
 """
 
+from __future__ import with_statement
+
 import time
 import socket
 from sparkplug.config.types import convert, parse_bool
