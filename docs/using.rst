@@ -53,6 +53,7 @@ messaging configuration. Included in the sparkplug source is an example::
     format = %%(body)s
     
     # Configure Python logging
+    # <http://docs.python.org/library/logging.html#configuration-file-format>
     #
     # For daemon mode, you probably want to send this to a file or to syslog,
     # not to stdout.
