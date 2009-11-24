@@ -13,14 +13,13 @@ Sparkplug can automatically declare and configure exchanges on startup::
     # Will the exchange be declared as auto-deleted, and be removed if all
     # producers exit?
     auto_delete = False
-    # Is the exchange exclusive to this program?
-    exclusive = False
 
 If you only need to check if an exchange exists, rather than creating one,
 it's sufficient to declare it passive::
 
     [exchange:expected]
     passive = True
+    type = direct
 
 This is handy if a consumer needs a particular exchange in order to publish
 responses.
