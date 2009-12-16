@@ -35,8 +35,6 @@ messaging configuration. Included in the sparkplug source is an example::
     # Will the exchange be declared as auto-deleted, and be removed if all
     # producers exit?
     auto_delete = False
-    # Is the exchange exclusive to this program?
-    exclusive = False
     
     [binding:postoffice/events]
     # The name of the queue to bind
@@ -53,6 +51,34 @@ messaging configuration. Included in the sparkplug source is an example::
     queue = events
     # Other parameters will be passed passed to the entry point
     format = %%(body)s
+    
+    # Configure Python logging
+    # <http://docs.python.org/library/logging.html#configuration-file-format>
+    #
+    # For daemon mode, you probably want to send this to a file or to syslog,
+    # not to stdout.
+    [loggers]
+    keys=root
+    
+    [handlers]
+    keys=consoleHandler
+    
+    [formatters]
+    keys=simpleFormatter
+    
+    [logger_root]
+    level=DEBUG
+    handlers=consoleHandler
+    
+    [handler_consoleHandler]
+    class=StreamHandler
+    level=DEBUG
+    formatter=simpleFormatter
+    args=(sys.stdout,)
+    
+    [formatter_simpleFormatter]
+    format=%(asctime)s - %(name)s - %(levelname)s - %(message)s
+    datefmt=
 
 .. automodule:: sparkplug.config.connection
 .. automodule:: sparkplug.config.queue
