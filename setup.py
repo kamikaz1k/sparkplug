@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sparkplug',
-    version='1.0.2',
+    version='1.0.3',
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
@@ -32,7 +32,7 @@ setup(
         'amqplib >= 0.6.1',
         'python-daemon',
         'functional',
-        'python-graph-core',
+        'python-graph-core == 1.6.2',
         'setuptools' # for pkg_resources, mostly.
     ],
     
