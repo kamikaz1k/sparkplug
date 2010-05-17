@@ -30,7 +30,7 @@ setup(
     ],
     install_requires=[
         'amqplib >= 0.6.1',
-        'python-daemon',
+        'python-daemon == 1.5.5',
         'functional',
         'python-graph-core == 1.6.2',
         'setuptools' # for pkg_resources, mostly.
