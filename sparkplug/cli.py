@@ -12,6 +12,7 @@ import functional
 import sparkplug.options
 import sparkplug.config
 import sparkplug.logutils
+import sparkplug.executor
 
 _log = sparkplug.logutils.LazyLogger(__name__)
 
@@ -29,6 +30,11 @@ def sparkplug_options(args):
                        action="store",
                        help="overrides the connector implementation entry point (default: %default)",
                        default="connection")
+    options.add_option("-j", "--fork",
+                       action="store",
+                       type="int",
+                       help="runs multiple parallel consumers with identical configurations",
+                       default=None)
     daemon_options = optparse.OptionGroup(
         options,
         "Daemon options",
@@ -114,7 +120,10 @@ def main(
     daemon_entry_point=run_sparkplug
 ):
     options, conf_files = optparse(args)
-
+    executor = sparkplug.executor.direct
+    if options.fork:
+        executor = sparkplug.executor.Subprocess(options.fork)
+    
     if options.daemon:
         with daemon.DaemonContext(
             pidfile=daemon.pidlockfile.PIDLockFile(options.pidfile),
@@ -127,11 +136,16 @@ def main(
                 sys.stdout = open(options.stdout, 'a')
             if options.stderr:
                 sys.stderr = open(options.stderr, 'a')
-        
+            
             try:
-                daemon_entry_point(options, conf_files)
+                executor(daemon_entry_point, options, conf_files)
+            except (SystemExit, KeyboardInterrupt):
+                _log.debug("Exiting sparkplug CLI.")
             except:
                 _log.exception("Dying horribly now.")
                 raise
     else:
-        daemon_entry_point(options, conf_files)
+        try:
+            executor(daemon_entry_point, options, conf_files)
+        except (SystemExit, KeyboardInterrupt):
+            _log.debug("Exiting sparkplug CLI.")
