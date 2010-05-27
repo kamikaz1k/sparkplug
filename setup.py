@@ -50,7 +50,8 @@ setup(
             'consumer = sparkplug.config.consumer:ConsumerConfigurer',
         ],
         'sparkplug.consumers': [
-            'echo = sparkplug.examples:EchoConsumer'
+            'echo = sparkplug.examples:EchoConsumer',
+            'broken = sparkplug.examples:Broken'
         ]
     },
     
