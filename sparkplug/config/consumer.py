@@ -88,21 +88,15 @@ class ConsumerConfigurer(DependencyConfigurer):
         self.consumer_params = kwargs
         
         self.depends_on(queue)
-        
-        self.consumer_keys = {}
     
     def start(self, channel):
         _log.debug("Creating consumer from %r", self.entry_point)
         consumer = self.entry_point(channel, **self.consumer_params)
         
         _log.debug("Consuming from queue %s", self.queue)
-        assert channel not in self.consumer_keys.keys()
-        self.consumer_keys[channel] = channel.basic_consume(callback=consumer, queue=self.queue)
-        _log.debug("Consumer key: %s", self.consumer_keys[channel])
+        channel.basic_consume(callback=consumer, queue=self.queue)
 
     def stop(self, channel):
-        _log.debug("Cancelling consumer key %s", self.consumer_keys[channel])
-        channel.basic_cancel(self.consumer_keys[channel])
-        del self.consumer_keys[channel]
+        pass
     
     parse_use = staticmethod(parse_use)
