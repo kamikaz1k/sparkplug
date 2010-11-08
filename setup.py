@@ -31,6 +31,7 @@ setup(
     install_requires=[
         'amqplib >= 0.6.1',
         'python-daemon == 1.5.5',
+        'lockfile == 0.8', # python-daemon requires this version, NOT the newer 0.9 stream
         'functional',
         'python-graph-core == 1.6.2',
         'setuptools' # for pkg_resources, mostly.
@@ -50,7 +51,8 @@ setup(
             'consumer = sparkplug.config.consumer:ConsumerConfigurer',
         ],
         'sparkplug.consumers': [
-            'echo = sparkplug.examples:EchoConsumer'
+            'echo = sparkplug.examples:EchoConsumer',
+            'broken = sparkplug.examples:Broken'
         ]
     },
     
