@@ -18,8 +18,11 @@ class Subprocess(object):
         self.process_count = process_count
     
     def __call__(self, f, *args, **kwargs):
+        def merge_kwargs(original_kwargs, index):
+            return dict(original_kwargs, **dict(worker_number=index))
+        
         processes = [
-            multiprocessing.Process(target=f, args=args, kwargs=kwargs)
+            multiprocessing.Process(target=f, args=args, kwargs=merge_kwargs(kwargs, index))
             for index in xrange(self.process_count)
         ]
         

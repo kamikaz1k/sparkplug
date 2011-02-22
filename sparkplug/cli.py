@@ -77,10 +77,11 @@ def sparkplug_options(args):
     options.add_option_group(daemon_options)
     return options.parse_args(args)
 
-def collate_configs(filenames):
+def collate_configs(filenames, defaults):
     _log.debug("Loading configuration files: %r", filenames)
+
+    config = ConfigParser.SafeConfigParser(defaults)
     
-    config = ConfigParser.SafeConfigParser()
     config.read(filenames)
     return config
 
@@ -95,10 +96,11 @@ def run_sparkplug(
     configurer_factory=sparkplug.config.create_configurer,
     connector_factory=sparkplug.config.create_connector,
     configure_logging=start_logging,
+    worker_number=0
 ):
     configure_logging(conf_files)
 
-    config = configparse(conf_files)
+    config = configparse(conf_files, {'worker-number': str(worker_number)})
     channel_configurer = configurer_factory(config)
     connector = connector_factory(
         config,

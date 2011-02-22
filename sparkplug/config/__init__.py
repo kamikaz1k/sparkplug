@@ -37,7 +37,19 @@ class DependencyConfigurer(object):
         pass
 
 def section_dict(config, section):
-    return dict(config.items(section))
+    # We strip out any keys with dashes in them so that we can use them in
+    # interpolation without having to pass them as kwargs to the individual
+    # configuration elements.
+    #
+    # 'use' (which is magic for the ConsumerConfigurer entry point) is not
+    # handled here - it's handled by argument scatter down at conf_entry_point
+    # and ConsumerConfigurer's __init__. All other "internal" config keys
+    # conform to this dash convention.
+    section_dict = dict(config.items(section))
+    stripped_dict = dict(
+        (key, section_dict[key]) for key in section_dict if '-' not in key
+    )
+    return stripped_dict
 
 def calculate_dependencies(configurers):
     """Given a dictionary of name -> DependencyConfigurer objects, returns a
