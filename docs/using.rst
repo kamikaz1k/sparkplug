@@ -85,3 +85,37 @@ messaging configuration. Included in the sparkplug source is an example::
 .. automodule:: sparkplug.config.exchange
 .. automodule:: sparkplug.config.binding
 .. automodule:: sparkplug.config.consumer
+
+Magic Placeholders
+==================
+
+The `--fork` option allows sparkplug to run multiple processes. Applications
+can use this feature to run multiple instances of the same configuration (to
+provide some degree of parallelism) or to run a series of closely-related
+configurations. Sparkplug provides a value named `worker-number` while parsing
+the configuration file, which will be substituted with the serial number of
+the sparkplug process. Worker numbers start at `0`.
+
+For example, the configuration::
+
+    [exchange:events]
+    type = direct
+    
+    [queue:events-%(worker-number)s]
+    auto_delete = True
+    
+    [binding:events/events-%(worker-number)s]
+    exchange = events
+    queue = events-%(worker-number)s
+    routing_key = events
+    
+    [consumer:events]
+    use = sparkplug#echo
+    queue = events-%(worker-number)s
+    
+    format = %%(body)s
+
+will create two queues (with `--fork=2`) named `events-0` and `events-1`, with
+associated bindings and consumers.
+
+The `worker-number` placeholder is set to `0` if `--fork` is not set.
