@@ -76,10 +76,11 @@ def calculate_dependencies(configurers):
     # other way around.
     return topological_sorting(config_graph.reverse())
 
-def load_configurers(config):
+def load_configurers(config, defaults):
     configurers = {}
     for section in [section for section in config.sections() if ':' in section]:
         section_type, section_name = section.split(':', 1)
+        section_name = section_name % defaults
         params = section_dict(config, section)
         try:
             _log.debug("Configuring %s (type %s)", section_name, section_type)
@@ -90,9 +91,9 @@ def load_configurers(config):
             _log.debug("Skipping config section [%s] (no entry point found)", section)
     return configurers
 
-def create_configurer(config):
+def create_configurer(config, defaults):
     # section is a list of type, name, params tuples
-    configurers_by_name = load_configurers(config)
+    configurers_by_name = load_configurers(config, defaults)
     configurers = calculate_dependencies(configurers_by_name)
     _log.debug("Configurer order: %r", configurers)
     return CompositeConfigurer(configurers)
