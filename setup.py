@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sparkplug',
-    version='1.3.dev',
+    version='1.3',
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
