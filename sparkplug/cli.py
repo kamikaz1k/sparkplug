@@ -79,15 +79,21 @@ def sparkplug_options(args):
 
 def collate_configs(filenames, defaults):
     _log.debug("Loading configuration files: %r", filenames)
-
+    
     config = ConfigParser.SafeConfigParser(defaults)
     
-    config.read(filenames)
+    for filename in filenames:
+        with open(filename, 'r') as config_file:
+            config.readfp(config_file)
+    
     return config
 
 def start_logging(filenames, configure=logging.config.fileConfig):
-    for file in filenames:
-        configure(file)
+    for filename in filenames:
+        # Ensure 'filename' exists and is readable. fileConfig will open it a
+        # second time anyways.
+        with open(filename, 'r') as file:
+            configure(filename)
 
 def run_sparkplug(
     options,
