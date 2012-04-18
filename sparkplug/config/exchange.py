@@ -46,7 +46,7 @@ class ExchangeConfigurer(DependencyConfigurer):
         create_args = dict(kwargs)
         convert(create_args, 'durable', parse_bool)
         convert(create_args, 'auto_delete', parse_bool)
-        convert(create_args, 'exclusive', parse_bool)
+        convert(create_args, 'internal', parse_bool)
         convert(create_args, 'passive', parse_bool)
         self.create_args = create_args
     
