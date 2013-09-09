@@ -1,4 +1,8 @@
 from setuptools import setup, find_packages
+import os.path as p
+
+with open(p.join(p.dirname(__file__), 'requirements.txt'), 'r') as reqs:
+    install_requires = [line.strip() for line in reqs]
 
 setup(
     name='sparkplug',
@@ -28,14 +32,7 @@ setup(
         'nose >= 0.10.4',
         'mock >= 0.5.0'
     ],
-    install_requires=[
-        'amqplib >= 0.6.1',
-        'python-daemon == 1.5.5',
-        'lockfile == 0.8', # python-daemon requires this version, NOT the newer 0.9 stream
-        'functional',
-        'python-graph-core == 1.6.2',
-        'setuptools' # for pkg_resources, mostly.
-    ],
+    install_requires=install_requires,
     
     entry_points = {
         'console_scripts': [

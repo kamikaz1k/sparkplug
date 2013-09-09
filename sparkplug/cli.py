@@ -7,7 +7,7 @@ import logging.config
 import os
 import sys
 import daemon
-import daemon.pidlockfile
+import daemon.pidfile
 import functional
 import sparkplug.options
 import sparkplug.config
@@ -135,7 +135,7 @@ def main(
     
     if options.daemon:
         with daemon.DaemonContext(
-            pidfile=daemon.pidlockfile.PIDLockFile(options.pidfile),
+            pidfile=daemon.pidfile.PIDLockFile(options.pidfile),
             working_directory=options.working_dir,
             uid=options.uid,
             gid=options.gid,
