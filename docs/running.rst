@@ -15,25 +15,24 @@ Sparkplug also supports running several instances of the same configuration, tra
 
 --fork=N      the number of copies of the configuration to run. If this option is specified, the entire sparkplug environment is run N times. (default: no forking)
 
-Daemon Mode
-***********
+Important note for Sparkplug 1.x users
+**************************************
 
-For production use, ``sparkplug`` can also be started as a daemon using the ``-d`` (``--daemon``) option. There are a number of related options, which tune the daemon's behaviour:
+The ``sparkplug`` command no longer accepts daemon-related options and no
+longer self-daemonizes. Self-daemonizing processes are surprisingly tricky to
+get right, and the trend towards daemon-managing supervisors makes it mostly
+irrelevant anyways. Consider using upstart, systemd, launchd, or similar if
+your OS supports it; for userland equivalents, consider supervisord or
+Foreman.
 
---daemon            run as a daemon rather than as an immediate process
---pidfile=PIDFILE   the daemon PID file (default: sparkplug.pid)
---working-dir=DIR   the directory to run the daemon in (default: .)
---uid=UID           the userid to run the daemon as (default: inherited from parent process)
---gid=GID           the groupid to run the daemon as (default: inherited from parent process)
---umask=UMASK       the umask for files created by the daemon (default: 0022)
---stdout=STDOUT     sends standard output to the file STDOUT if set
---stderr=STDERR     sends standard error to the file STDERR if set
+If you absolutely must have sparkplug daemonize itself, use your distro's
+daemon wrappers (``start-stop-daemon`` and friends).
 
 Example
 *******
 
 .. highlight:: bash
 
-To run the included example as a daemon::
+To run the included example::
 
-    sparkplug --daemon example.ini
+    sparkplug example.ini
