@@ -53,28 +53,28 @@ class AMQPConnector(object):
         convert(self.connection_args, 'ssl', parse_bool)
         self.channel_configurer = channel_configurer
     
-    def run_channel(self, channel):
+    def run_channel(self, channel, continue_callback):
         _log.debug("Configuring channel elements.")
         self.channel_configurer.start(channel)
         try:
-            self.pump(channel)
+            self.pump(channel, continue_callback)
         except (SystemExit, KeyboardInterrupt):
             _log.debug("Tearing down connection.")
             self.channel_configurer.stop(channel)
             raise
     
-    def pump(self, channel):
-        while True:
+    def pump(self, channel, continue_callback):
+        while continue_callback():
             _log.debug("Waiting for a message.")
             channel.wait()
     
-    def run(self):
-        while True:
+    def run(self, continue_callback):
+        while continue_callback():
             try:
                 _log.debug("Connecting to broker.")
                 with amqp.Connection(**self.connection_args) as connection:
                     with connection.channel() as channel:
-                        self.run_channel(channel)
+                        self.run_channel(channel, continue_callback)
             except (SystemExit, KeyboardInterrupt):
                 return
             except (IOError, socket.error):
