@@ -4,7 +4,6 @@ import signal
 import errno
 import time
 import contextlib as cx
-import pysigset as sigset
 
 import sparkplug.logutils
 
@@ -46,6 +45,7 @@ class Subprocess(object):
             self.start_worker(default_handlers, f)
 
     def start_worker(self, default_handlers, f, *args, **kwargs):
+        import pysigset as sigset
         # Suspend signals related to this fork manager, so that we don't do
         # dumb things like set self.continuing = False in the child process
         # when we should actually be shutting down or crashing.
@@ -102,6 +102,7 @@ class Subprocess(object):
             self.handle_signals(original_handlers)
 
     def handle_signals(self, handlers):
+        import pysigset as sigset
         original_handlers = {}
         # This can be called inside of another suspended_signals guard,
         # inside of start_worker. This is "safe" -- exiting the inner
