@@ -1,7 +1,9 @@
 import os
-import sys
-import signal
 import errno
+import select
+import signal
+import socket
+import sys
 import time
 import contextlib as cx
 
@@ -9,7 +11,7 @@ import sparkplug.logutils
 
 _log = sparkplug.logutils.LazyLogger(__name__)
 
-def always():
+def always(*connections):
     return True
 
 def direct(f):
@@ -25,11 +27,39 @@ class Subprocess(object):
         self.process_count = process_count
         self.continuing = True
         self.workers = set()
-        self.expected_ppid = os.getpid()
+        self.parent_socket, self.child_socket = socket.socketpair()
     
-    def parent_surviving(self):
-        # Workers should exit if the parent process goes away silently.
-        return os.getppid() == self.expected_ppid
+    def parent_surviving(self, *connections):
+        timeout = None
+        if len(connections) == 0:
+            # If there are no open connections, then poll instead of blocking
+            # so that workers can continue onwards and open a connection.
+            # They'll return to this check (with a connection) as soon as
+            # they've done so.
+            timeout = 0
+        elif any(len(connection.method_queue) > 0 for connection in connections):
+            # If any connection has unprocessed data from the server in its
+            # queue, poll instead of blocking so that the worker can process
+            # that data without waiting for further IO to tickle the select.
+            # The worker will return to this check (with an empty queue) as
+            # soon as it's done so.
+            timeout = 0
+        elif any(
+            len(getattr(connection.transport, '_read_buffer', bytes())) > 0
+            for connection in connections
+        ):
+            # The amqplib `TCPTransport` class internally buffers data read
+            # ahead of the current message. If this buffer is non-empty, poll
+            # instead of blocking so that the worker can process that data
+            # without waiting for further IO to tickle the select. The worker
+            # will return to this check (with an empty buffer) as soon as
+            # it's done so.
+            timeout = 0
+        sockets = [conn.transport.sock for conn in connections] + [self.child_socket]
+        read, write, exception = select.select(sockets, [], [], timeout)
+        if self.child_socket in read:
+            _log.debug("Master process has died; exiting")
+        return self.child_socket not in read
     
     def __call__(self, f):
         try:
@@ -58,6 +88,7 @@ class Subprocess(object):
                 # normally in this process, so invoke it directly.
                 sigsuspend.__exit__(None, None, None)
                 self.abandon_stdin()
+                self.abandon_parent()
                 try:
                     f(self.parent_surviving)
                 finally:
@@ -74,6 +105,9 @@ class Subprocess(object):
     def abandon_stdin(self):
         sys.stdin.close()
 
+    def abandon_parent(self):
+        self.parent_socket.close()
+
     def await_worker(self):
         try:
             pid, status = os.wait()
@@ -85,8 +119,9 @@ class Subprocess(object):
                 raise
 
     def terminate_workers(self):
+        self.parent_socket.close()
         for worker in self.workers:
-            _log.debug("Terminating worker (pid %d)", worker)
+            _log.debug("Signalling worker (pid %d)", worker)
             os.kill(worker, signal.SIGINT)
             os.waitpid(worker, 0)
 
