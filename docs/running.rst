@@ -11,9 +11,11 @@ By default, Sparkplug looks for a configuration section named ``connection:main`
 --connection  the name of the connection block to use ("main")
 --connector   the type of the connection block to use ("connection")
 
-Sparkplug also supports running several instances of the same configuration, trading AMQP's delivery guarantees for higher throughput via concurrency.
+On POSIX operating systems, Sparkplug also supports running several instances of the same configuration, trading AMQP's delivery order guarantees for higher throughput via concurrency.
 
 --fork=N      the number of copies of the configuration to run. If this option is specified, the entire sparkplug environment is run N times. (default: no forking)
+
+This option is not available on Windows.
 
 Important note for Sparkplug 1.x users
 **************************************
