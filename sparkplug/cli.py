@@ -108,7 +108,7 @@ def run_sparkplug(
     
     defaults = {'worker-number': str(worker_number)}
     config = configparse(conf_files, defaults)
-    channel_configurer = configurer_factory(config, defaults)
+    channel_configurer = configurer_factory(config, defaults, options.connector)
     connector = connector_factory(
         config,
         channel_configurer,
