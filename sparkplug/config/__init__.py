@@ -1,8 +1,7 @@
 import re
 from pkg_resources import iter_entry_points
-from pygraph.classes.digraph import digraph
-from pygraph.algorithms.sorting import topological_sorting
 import sparkplug.logutils
+import sparkplug.digraph as d
 
 _log = sparkplug.logutils.LazyLogger(__name__)
 
@@ -55,26 +54,23 @@ def calculate_dependencies(configurers):
     """Given a dictionary of name -> DependencyConfigurer objects, returns a
     list with the leaf nodes of the implied dependencies first.
     """
-    
+
     # We do this via graph theory rather than hard-coding a particular startup
     # order.
-    config_graph = digraph()
+    config_graph = d.Digraph()
     for configurer in configurers.values():
         config_graph.add_node(configurer)
     for configurer_name, configurer in configurers.items():
         # Add outbound dependencies for every node.
         for name in configurer.depends_on_names:
             _log.debug("%s depends on %s", configurer_name, name)
-            config_graph.add_edge(configurer, configurers[name])
+            config_graph.add_edge(configurers[name], configurer)
         # Add inbound dependencies for every node.
         for name in configurer.depended_on_names:
             _log.debug("%s depends on %s", name, configurer_name)
-            config_graph.add_edge(configurers[name], configurer)
-    
-    # Reverse here because in topological sorting, nodes with no inbound are first
-    # and nodes with no outbound edges are last. We actually want to do things the
-    # other way around.
-    return topological_sorting(config_graph.reverse())
+            config_graph.add_edge(configurer, configurers[name])
+
+    return config_graph.sorted()
 
 def load_configurers(config, defaults, connector):
     configurers = {}
