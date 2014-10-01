@@ -10,7 +10,7 @@ setup(
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
-    download_url='http://alchemy.grimoire.ca/python/releases/sparkplug/',
+    download_url='https://pypi.python.org/pypi/sparkplug/',
     description='An AMQP message consumer daemon',
     
     classifiers=[
