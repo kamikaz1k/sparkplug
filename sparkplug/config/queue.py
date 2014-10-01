@@ -47,3 +47,6 @@ class QueueConfigurer(DependencyConfigurer):
         _log.debug("Declaring queue %s (%r)", self.queue, self.create_args)
                 
         channel.queue_declare(queue=self.queue, **self.create_args)
+
+    def __repr__(self):
+        return "Queue(queue={0.queue})".format(self)

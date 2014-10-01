@@ -48,3 +48,6 @@ class BindingConfigurer(DependencyConfigurer):
             exchange=self.exchange,
             routing_key=self.routing_key
         )
+
+    def __repr__(self):
+        return "Binding(queue={0.queue}, exchange={0.exchange}, routing_key={0.routing_key})".format(self)
