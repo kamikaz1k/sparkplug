@@ -58,3 +58,6 @@ class ExchangeConfigurer(DependencyConfigurer):
             type=self.type,
             **self.create_args
         )
+
+    def __repr__(self):
+        return "Exchange(name={0.exchange}, type={0.type})".format(self)
