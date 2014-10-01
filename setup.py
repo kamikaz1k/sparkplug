@@ -6,11 +6,11 @@ with open(p.join(p.dirname(__file__), 'requirements.txt'), 'r') as reqs:
 
 setup(
     name='sparkplug',
-    version='1.6.dev',
+    version='1.7.dev',
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
-    download_url='http://alchemy.grimoire.ca/python/releases/sparkplug/',
+    download_url='https://pypi.python.org/pypi/sparkplug/',
     description='An AMQP message consumer daemon',
     
     classifiers=[
