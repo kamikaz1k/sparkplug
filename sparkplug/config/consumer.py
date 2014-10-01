@@ -100,3 +100,6 @@ class ConsumerConfigurer(DependencyConfigurer):
         pass
     
     parse_use = staticmethod(parse_use)
+
+    def __repr__(self):
+        return "Consumer(queue={0.queue}, consumer={0.entry_point}".format(self)
