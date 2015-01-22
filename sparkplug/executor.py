@@ -3,10 +3,12 @@ import signal
 import time
 import multiprocessing
 
+
 def direct(f, *args, **kwargs):
     """Runs a task in the current process. This is a very thin wrapper around
     a direct function call."""
     return f(*args, **kwargs)
+
 
 class Subprocess(object):
     sleep = 3600

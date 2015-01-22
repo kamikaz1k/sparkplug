@@ -42,9 +42,9 @@ import socket
 from sparkplug.config.types import convert, parse_bool
 from sparkplug.logutils import LazyLogger
 from amqplib import client_0_8 as amqp
-from functional import partial
 
 _log = LazyLogger(__name__)
+
 
 class AMQPConnector(object):
     def __init__(self, name, channel_configurer, reconnect_delay='10', **kwargs):

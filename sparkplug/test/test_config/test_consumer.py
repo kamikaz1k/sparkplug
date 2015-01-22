@@ -1,9 +1,11 @@
 import mock
 
-from sparkplug.config.consumer import parse_use, ConsumerConfigurer
+from sparkplug.config.consumer import parse_use
 
-def _raise(type, value=None):
-    raise type, value
+
+def _raise(exception_type, value=None):
+    raise exception_type(value)
+
 
 def test_parse_use_basic():
     load_entry_point = mock.Mock()
@@ -13,6 +15,7 @@ def test_parse_use_basic():
     
     assert mock.sentinel.entry_point == entry_point
     assert (('funkydist', 'test group', 'start_here'), {}) == load_entry_point.call_args
+
 
 def test_parse_use_oops():
     load_entry_point = mock.Mock()
@@ -24,7 +27,6 @@ def test_parse_use_oops():
     except ImportError:
         pass
 
+
 def test_configure_basic():
     builder = mock.Mock()
-    
-    

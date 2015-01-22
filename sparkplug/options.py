@@ -3,6 +3,7 @@ import grp
 import copy
 import optparse
 
+
 def check_umask(options, optname, value):
     try:
         # Umasks look like octal.
@@ -11,6 +12,7 @@ def check_umask(options, optname, value):
         raise optparse.OptionValueError(
             "option %s: %r doesn't look like a umask to me, bucko" % (optname, value)
         )
+
 
 def check_uid(options, optname, value):
     try:
@@ -24,8 +26,10 @@ def check_uid(options, optname, value):
         except KeyError:
             # Nope, that didn't work either. Die screaming.
             raise optparse.OptionValueError(
-                "option %s: %r doesn't look like a valid uid or username from here" % (optname, value)
+                "option %s: %r doesn't look like a valid uid or username from here"
+                % (optname, value)
             )
+
 
 def check_gid(options, optname, value):
     try:
@@ -39,8 +43,10 @@ def check_gid(options, optname, value):
         except KeyError:
             # Nope, that didn't work either. Die screaming.
             raise optparse.OptionValueError(
-                "option %s: %r doesn't look like a valid gid or group name from here" % (optname, value)
+                "option %s: %r doesn't look like a valid gid or group name from here"
+                % (optname, value)
             )
+
 
 class Option(optparse.Option):
     TYPES = optparse.Option.TYPES + ("umask", "uid", "gid")
