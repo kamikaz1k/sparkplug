@@ -25,6 +25,7 @@ from sparkplug.logutils import LazyLogger
 
 _log = LazyLogger(__name__)
 
+
 class BindingConfigurer(DependencyConfigurer):
     def __init__(self, name, queue, exchange, routing_key=''):
         DependencyConfigurer.__init__(self)
@@ -50,4 +51,5 @@ class BindingConfigurer(DependencyConfigurer):
         )
 
     def __repr__(self):
-        return "Binding(queue={0.queue}, exchange={0.exchange}, routing_key={0.routing_key})".format(self)
+        return ("Binding(queue={0.queue}, exchange={0.exchange},"
+                "routing_key={0.routing_key})".format(self))

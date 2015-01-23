@@ -26,7 +26,7 @@ setup(
         'Topic :: Utilities'
     ],
     
-    packages = find_packages(exclude=['*.test', '*.test.*']),
+    packages=find_packages(exclude=['*.test', '*.test.*']),
     
     tests_require=[
         'nose >= 0.10.4',
@@ -34,7 +34,7 @@ setup(
     ],
     install_requires=install_requires,
     
-    entry_points = {
+    entry_points={
         'console_scripts': [
             'sparkplug = sparkplug.cli:main'
         ],
@@ -53,5 +53,5 @@ setup(
         ]
     },
     
-    test_suite = 'nose.collector'
+    test_suite='nose.collector'
 )

@@ -8,13 +8,13 @@ import os
 import sys
 import daemon
 import daemon.pidfile
-import functional
 import sparkplug.options
 import sparkplug.config
 import sparkplug.logutils
 import sparkplug.executor
 
 _log = sparkplug.logutils.LazyLogger(__name__)
+
 
 def sparkplug_options(args):
     options = optparse.OptionParser(
@@ -77,6 +77,7 @@ def sparkplug_options(args):
     options.add_option_group(daemon_options)
     return options.parse_args(args)
 
+
 def collate_configs(filenames, defaults):
     _log.debug("Loading configuration files: %r", filenames)
     
@@ -88,12 +89,14 @@ def collate_configs(filenames, defaults):
     
     return config
 
+
 def start_logging(filenames, configure=logging.config.fileConfig):
     for filename in filenames:
         # Ensure 'filename' exists and is readable. fileConfig will open it a
         # second time anyways.
         with open(filename, 'r') as file:
             configure(filename)
+
 
 def run_sparkplug(
     options,
@@ -117,11 +120,12 @@ def run_sparkplug(
     )
 
     try:
-        _log.info("Starting sparkplug.");
+        _log.info("Starting sparkplug.")
         connector.run()
     except (SystemExit, KeyboardInterrupt):
-        print # GNU Readline hates dangling ^Cs.
-    _log.info("Exiting sparkplug normally.");
+        print  # GNU Readline hates dangling ^Cs.
+    _log.info("Exiting sparkplug normally.")
+
 
 def main(
     args=sys.argv[1:],

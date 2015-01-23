@@ -55,11 +55,12 @@ from sparkplug.logutils import LazyLogger
 
 _log = LazyLogger(__name__)
 
+
 def parse_use(group, use, load_entry_point=pkg_resources.load_entry_point):
     """Parses and loads the entry point for a 'use' directive. The ``use``
     string is expected to look like ``dist#name`` and will be split on the
     first ``'#'`` into a ``dist, name`` pair. Then we pass the whole lot
-    to the ``load_entry_point`` callback (using the same protocol as 
+    to the ``load_entry_point`` callback (using the same protocol as
     ``pkg_resources.load_entry_point``) and return whatever we get back.
     
     :param group: the entry point group to load from.
@@ -69,12 +70,13 @@ def parse_use(group, use, load_entry_point=pkg_resources.load_entry_point):
     dist, entry_point = use.split('#', 1)
     return load_entry_point(dist, group, entry_point)
 
+
 class ConsumerConfigurer(DependencyConfigurer):
     """Handles per-channel setup and teardown for consumer blocks in the
     sparkplug config file.
     
     :param name: the name of the consumer section.
-    :param configurer: the configuration builder to configure with 
+    :param configurer: the configuration builder to configure with
         callbacks.
     :param use: the consumer entry point to look up.
     :param queue: the queue to bind to.

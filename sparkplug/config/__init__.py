@@ -5,6 +5,7 @@ import sparkplug.digraph as d
 
 _log = sparkplug.logutils.LazyLogger(__name__)
 
+
 # We use this for the final channel configurer (see create_configurer)
 class CompositeConfigurer(object):
     def __init__(self, configurers):
@@ -17,6 +18,7 @@ class CompositeConfigurer(object):
     def stop(self, channel):
         for configurer in reversed(self.configurers):
             configurer.stop(channel)
+
 
 class DependencyConfigurer(object):
     def __init__(self):
@@ -35,6 +37,7 @@ class DependencyConfigurer(object):
     def stop(self, channel):
         pass
 
+
 def section_dict(config, section):
     # We strip out any keys with dashes in them so that we can use them in
     # interpolation without having to pass them as kwargs to the individual
@@ -49,6 +52,7 @@ def section_dict(config, section):
         (key, section_dict[key]) for key in section_dict if '-' not in key
     )
     return stripped_dict
+
 
 def calculate_dependencies(configurers):
     """Given a dictionary of name -> DependencyConfigurer objects, returns a
@@ -72,6 +76,7 @@ def calculate_dependencies(configurers):
 
     return config_graph.sorted()
 
+
 def load_configurers(config, defaults, connector):
     configurers = {}
     for section in [section for section in config.sections() if ':' in section]:
@@ -85,6 +90,7 @@ def load_configurers(config, defaults, connector):
             configurers[section_name] = load_configurer(section_type, section_name, params)
     return configurers
 
+
 def create_configurer(config, defaults, connector):
     # section is a list of type, name, params tuples
     configurers_by_name = load_configurers(config, defaults, connector)
@@ -92,14 +98,17 @@ def create_configurer(config, defaults, connector):
     _log.debug("Configurer order: %r", configurers)
     return CompositeConfigurer(configurers)
 
+
 def load_configurer(type, name, params):
     return conf_entry_point('sparkplug.configurers', type, name, params)
+
 
 def conf_entry_point(group, type, name, params, *args):
     for entry_point in iter_entry_points(group, type):
         connector_factory = entry_point.load()
         return connector_factory(name, *args, **params)
-    raise EnvironmentError, "No entry point for %r named %r found." % (group, type)
+    raise EnvironmentError("No entry point for %r named %r found." % (group, type))
+
 
 def create_connector(config, channel_configurer, connector, connection):
     _log.debug("Creating connector %s (of type %s)", connection, connector)
@@ -107,4 +116,5 @@ def create_connector(config, channel_configurer, connector, connection):
     section = "%s:%s" % (connector, connection)
     params = section_dict(config, section)
 
-    return conf_entry_point('sparkplug.connectors', connector, connection, params, channel_configurer)
+    return conf_entry_point('sparkplug.connectors', connector, connection, params,
+                            channel_configurer)
