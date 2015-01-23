@@ -1,7 +1,9 @@
 import collections
 
+
 class CyclicGraphError(Exception):
     pass
+
 
 class Digraph(object):
     """An acyclic, directed graph.

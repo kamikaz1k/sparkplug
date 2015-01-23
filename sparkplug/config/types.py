@@ -1,6 +1,7 @@
 def convert(dict, key, type):
-    if dict.has_key(key):
+    if key in dict:
         dict[key] = type(dict[key])
+
 
 def parse_bool(value):
     """Semi-blind boolean conversion that treats "False" and u"False"

@@ -30,6 +30,7 @@ from sparkplug.logutils import LazyLogger
 
 _log = LazyLogger(__name__)
 
+
 class QueueConfigurer(DependencyConfigurer):
     def __init__(self, name, **kwargs):
         DependencyConfigurer.__init__(self)

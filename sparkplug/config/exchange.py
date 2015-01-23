@@ -36,6 +36,7 @@ from sparkplug.logutils import LazyLogger
 
 _log = LazyLogger(__name__)
 
+
 class ExchangeConfigurer(DependencyConfigurer):
     def __init__(self, name, type, **kwargs):
         DependencyConfigurer.__init__(self)

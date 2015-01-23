@@ -19,6 +19,7 @@ def direct(f):
     a direct function call."""
     return f(always)
 
+
 class Subprocess(object):
     """Runs a task in N subprocesses. The current process is suspended (using
     ``wait``) until a signal arrives or a child process exits."""
