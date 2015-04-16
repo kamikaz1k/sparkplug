@@ -36,17 +36,17 @@ class QueueConfigurer(DependencyConfigurer):
         DependencyConfigurer.__init__(self)
 
         self.queue = name
-        
+
         create_args = dict(kwargs)
         convert(create_args, 'durable', parse_bool)
         convert(create_args, 'auto_delete', parse_bool)
         convert(create_args, 'exclusive', parse_bool)
         convert(create_args, 'passive', parse_bool)
         self.create_args = create_args
-    
+
     def start(self, channel):
         _log.debug("Declaring queue %s (%r)", self.queue, self.create_args)
-                
+
         channel.queue_declare(queue=self.queue, **self.create_args)
 
     def __repr__(self):

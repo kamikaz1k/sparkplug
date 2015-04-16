@@ -7,7 +7,7 @@ def parse_bool(value):
     """Semi-blind boolean conversion that treats "False" and u"False"
     as False, not True. If fed a boolean, nothing happens and the
     value is returned as-is.
-    
+
         >>> parse_bool("False")
         False
         >>> parse_bool("True")
