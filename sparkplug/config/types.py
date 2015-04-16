@@ -1,3 +1,6 @@
+import json
+
+
 def convert(dict, key, type):
     if key in dict:
         dict[key] = type(dict[key])
@@ -21,3 +24,14 @@ def parse_bool(value):
         'True': True,
         'False': False
     }.get(value, value))
+
+
+def parse_dict(value):
+    """Convert a JSON string to dictionary
+
+    >>> parse_dict('{"a": 1}')
+    {"a": 1}
+    >>> parse_dict('{}')
+    {}
+    """
+    return json.loads(value)
