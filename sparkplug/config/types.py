@@ -29,9 +29,9 @@ def parse_bool(value):
 def parse_dict(value):
     """Convert a JSON string to dictionary
 
-    >>> parse_dict('{"a": 1}')
-    {"a": 1}
-    >>> parse_dict('{}')
-    {}
+        >>> parse_dict('{"a": 1}')
+        {"a": 1}
+        >>> parse_dict('{}')
+        {}
     """
     return json.loads(value)
