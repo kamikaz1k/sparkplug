@@ -45,6 +45,12 @@ class QueueConfigurer(DependencyConfigurer):
         convert(create_args, 'arguments', parse_dict)
         self.create_args = create_args
 
+        dlx = create_args \
+            .get('arguments', {}) \
+            .get('x-dead-letter-exchange', None)
+        if dlx:
+            self.depends_on(dlx)
+
     def start(self, channel):
         _log.debug("Declaring queue %s (%r)", self.queue, self.create_args)
 
