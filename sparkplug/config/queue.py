@@ -25,7 +25,7 @@ __ `Consumer configuration`_
 """
 
 from sparkplug.config import DependencyConfigurer
-from sparkplug.config.types import convert, parse_bool
+from sparkplug.config.types import convert, parse_bool, parse_dict
 from sparkplug.logutils import LazyLogger
 
 _log = LazyLogger(__name__)
@@ -36,17 +36,24 @@ class QueueConfigurer(DependencyConfigurer):
         DependencyConfigurer.__init__(self)
 
         self.queue = name
-        
+
         create_args = dict(kwargs)
         convert(create_args, 'durable', parse_bool)
         convert(create_args, 'auto_delete', parse_bool)
         convert(create_args, 'exclusive', parse_bool)
         convert(create_args, 'passive', parse_bool)
+        convert(create_args, 'arguments', parse_dict)
         self.create_args = create_args
-    
+
+        dlx = create_args \
+            .get('arguments', {}) \
+            .get('x-dead-letter-exchange', None)
+        if dlx:
+            self.depends_on(dlx)
+
     def start(self, channel):
         _log.debug("Declaring queue %s (%r)", self.queue, self.create_args)
-                
+
         channel.queue_declare(queue=self.queue, **self.create_args)
 
     def __repr__(self):

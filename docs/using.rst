@@ -26,6 +26,10 @@ messaging configuration. Included in the sparkplug source is an example::
     auto_delete = False
     # Is the queue exclusive to this program?
     exclusive = False
+    # Extra arguments to be passed down to `channel.queue_declare`
+    # See http://amqp.readthedocs.org/en/latest/reference/amqp.channel.html#amqp.channel.Channel.queue_declare
+    # The value is parsed as a JSON string into a Python dictionary
+    arguments = {}
     
     [exchange:postoffice]
     # The exchange type ('direct', 'fanout', or 'topic')
