@@ -1,6 +1,6 @@
 from __future__ import with_statement
 
-import ConfigParser
+from configparser import SafeConfigParser
 import optparse
 import logging
 import logging.config
@@ -67,7 +67,7 @@ def sparkplug_options(args):
                               action="store",
                               type="umask",
                               help="the umask for files created by the daemon (default: 0022)",
-                              default=0022)
+                              default=0o0022)
     daemon_options.add_option("--stdout",
                               help="sends standard output to the file STDOUT if set",
                               action="store")
@@ -80,13 +80,13 @@ def sparkplug_options(args):
 
 def collate_configs(filenames, defaults):
     _log.debug("Loading configuration files: %r", filenames)
-    
-    config = ConfigParser.SafeConfigParser(defaults)
-    
+
+    config = SafeConfigParser(defaults)
+
     for filename in filenames:
         with open(filename, 'r') as config_file:
             config.readfp(config_file)
-    
+
     return config
 
 
@@ -108,10 +108,14 @@ def run_sparkplug(
     worker_number=0
 ):
     configure_logging(conf_files)
-    
+
     defaults = {'worker-number': str(worker_number)}
     config = configparse(conf_files, defaults)
-    channel_configurer = configurer_factory(config, defaults, options.connector)
+    channel_configurer = configurer_factory(
+        config,
+        defaults,
+        options.connector
+    )
     connector = connector_factory(
         config,
         channel_configurer,
@@ -136,7 +140,7 @@ def main(
     executor = sparkplug.executor.direct
     if options.fork:
         executor = sparkplug.executor.Subprocess(options.fork)
-    
+
     if options.daemon:
         with daemon.DaemonContext(
             pidfile=daemon.pidfile.PIDLockFile(options.pidfile),
@@ -149,7 +153,7 @@ def main(
                 sys.stdout = open(options.stdout, 'a')
             if options.stderr:
                 sys.stderr = open(options.stderr, 'a')
-            
+
             try:
                 executor(daemon_entry_point, options, conf_files)
             except (SystemExit, KeyboardInterrupt):
