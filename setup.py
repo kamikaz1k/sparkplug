@@ -6,7 +6,7 @@ with open(p.join(p.dirname(__file__), 'requirements.txt'), 'r') as reqs:
 
 setup(
     name='sparkplug',
-    version='1.8.dev',
+    version='1.8.0',
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
