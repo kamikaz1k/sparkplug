@@ -1,5 +1,5 @@
+from __future__ import print_function
 import os
-import sys
 
 
 class EchoConsumer(object):
@@ -9,7 +9,7 @@ class EchoConsumer(object):
 
     def __call__(self, msg):
         text = self.format.format(body=msg.body, pid=os.getpid())
-        sys.stdout.write(text)
+        print(text)
         self.channel.basic_ack(msg.delivery_tag)
 
 
