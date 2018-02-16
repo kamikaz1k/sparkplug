@@ -4,6 +4,12 @@ import os.path as p
 with open(p.join(p.dirname(__file__), 'requirements.txt'), 'r') as reqs:
     install_requires = [line.strip() for line in reqs]
 
+with open(p.join(p.dirname(__file__), 'requirements-dev.txt'), 'r') as reqs:
+    tests_require = [
+        line.strip()
+        for line in reqs
+        if not line.startswith('-r')]
+
 setup(
     name='sparkplug',
     version='1.8.0',
@@ -28,10 +34,7 @@ setup(
 
     packages=find_packages(exclude=['*.test', '*.test.*']),
 
-    tests_require=[
-        'nose >= 0.10.4',
-        'mock >= 0.5.0'
-    ],
+    tests_require=tests_require,
     install_requires=install_requires,
 
     entry_points={
