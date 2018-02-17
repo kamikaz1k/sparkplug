@@ -4,15 +4,21 @@ import os.path as p
 with open(p.join(p.dirname(__file__), 'requirements.txt'), 'r') as reqs:
     install_requires = [line.strip() for line in reqs]
 
+with open(p.join(p.dirname(__file__), 'requirements-dev.txt'), 'r') as reqs:
+    tests_require = [
+        line.strip()
+        for line in reqs
+        if not line.startswith('-r')]
+
 setup(
     name='sparkplug',
-    version='1.8.dev',
+    version='1.8.0',
     author='Owen Jacobson',
     author_email='owen.jacobson@grimoire.ca',
     url='http://alchemy.grimoire.ca/python/sites/sparkplug/',
     download_url='https://pypi.python.org/pypi/sparkplug/',
     description='An AMQP message consumer daemon',
-    
+
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -25,15 +31,12 @@ setup(
         'Topic :: System :: Distributed Computing',
         'Topic :: Utilities'
     ],
-    
+
     packages=find_packages(exclude=['*.test', '*.test.*']),
-    
-    tests_require=[
-        'nose >= 0.10.4',
-        'mock >= 0.5.0'
-    ],
+
+    tests_require=tests_require,
     install_requires=install_requires,
-    
+
     entry_points={
         'console_scripts': [
             'sparkplug = sparkplug.cli:main'
@@ -52,6 +55,6 @@ setup(
             'broken = sparkplug.examples:Broken'
         ]
     },
-    
+
     test_suite='nose.collector'
 )
