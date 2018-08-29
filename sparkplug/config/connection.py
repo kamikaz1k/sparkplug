@@ -24,7 +24,7 @@ which is equivalent to::
     password = guest
     # If set, forces the use of SSL to connect to the broker.
     ssl = False
-    
+
 Sparkplug operates by starting a connection, then applying all other
 configuration directives to it (to set up queues_, exchanges_, bindings_,
 and consumers_), then waiting for messages to be delivered.
@@ -37,11 +37,11 @@ and consumers_), then waiting for messages to be delivered.
 
 from __future__ import with_statement
 
+import amqp
 import time
 import socket
 from sparkplug.config.types import convert, parse_bool
 from sparkplug.logutils import LazyLogger
-from amqplib import client_0_8 as amqp
 
 _log = LazyLogger(__name__)
 
