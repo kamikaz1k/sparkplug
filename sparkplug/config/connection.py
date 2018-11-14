@@ -42,6 +42,7 @@ import time
 import socket
 from sparkplug.config.types import convert, parse_bool
 from sparkplug.logutils import LazyLogger
+from amqp import spec
 
 _log = LazyLogger(__name__)
 
@@ -52,7 +53,7 @@ class AMQPConnector(object):
         self.connection_args = dict(kwargs)
         convert(self.connection_args, 'ssl', parse_bool)
         self.channel_configurer = channel_configurer
-    
+
     def run_channel(self, channel):
         _log.debug("Configuring channel elements.")
         self.channel_configurer.start(channel)
@@ -62,12 +63,12 @@ class AMQPConnector(object):
             _log.debug("Tearing down connection.")
             self.channel_configurer.stop(channel)
             raise
-    
+
     def pump(self, channel):
         while True:
             _log.debug("Waiting for a message.")
-            channel.wait()
-    
+            channel.wait(spec.Basic.Deliver)
+
     def run(self):
         while True:
             try:
