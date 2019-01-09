@@ -2,6 +2,7 @@ import os
 import signal
 import time
 import multiprocessing
+from builtins import range
 
 
 def direct(f, *args, **kwargs):
@@ -25,7 +26,7 @@ class Subprocess(object):
         
         processes = [
             multiprocessing.Process(target=f, args=args, kwargs=add_worker_number(kwargs, index))
-            for index in xrange(self.process_count)
+            for index in range(self.process_count)
         ]
         
         try:
