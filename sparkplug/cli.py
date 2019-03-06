@@ -67,7 +67,7 @@ def sparkplug_options(args):
                               action="store",
                               type="umask",
                               help="the umask for files created by the daemon (default: 0022)",
-                              default=0o0022)
+                              default=0022)
     daemon_options.add_option("--stdout",
                               help="sends standard output to the file STDOUT if set",
                               action="store")
